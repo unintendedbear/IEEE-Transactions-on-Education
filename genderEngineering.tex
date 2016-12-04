@@ -72,9 +72,9 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+  %\usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
+  %\graphicspath{{../img/}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
   % \DeclareGraphicsExtensions{.eps}
@@ -282,6 +282,8 @@
 % systems. The latest version and documentation can be obtained at:
 % http://www.ctan.org/pkg/url
 % Basically, \url{my_url_here}.
+
+\usepackage{graphicx}
 
 
 
@@ -528,7 +530,14 @@ Knowing the students is key for knowing the global status of the school before c
 18
 \subsection{Academics}
 
-In some way, the teachers are also related to the resources, or are considered resources themselves. In addition, it is of interest to this study the analysis of the ratio between female and male STEM teachers, so that it can be studied if the students have STEM women as role models.
+In some way, the teachers are also related to the resources, or can be considered resources themselves. In addition, it is of interest to this study the analysis of the ratio between female and male STEM teachers, so that it can be studied if the students have STEM women as role models. At the studied high schoool, the ratio between men and women, in the departments we are interested in, is described if Figure \ref{fig:teachers}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/profes_ieszv.png}
+  \caption{Distribution of gender among the teachers from deparments related to technology or computer science.}
+  \label{fig:teachers}
+\end{figure}
 
 
 The students undertook the survey while they where at class, and the classes visited where always related to Technology or Computer science. The courses range from the last of high school to technical courses for undergraduates. The total amount of students and the distribution is detailed in Table \ref{tab:muestra}.
