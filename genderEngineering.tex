@@ -72,9 +72,9 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+  %\usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
+  %\graphicspath{{../img/}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
   % \DeclareGraphicsExtensions{.eps}
@@ -283,6 +283,8 @@
 % http://www.ctan.org/pkg/url
 % Basically, \url{my_url_here}.
 
+\usepackage{graphicx}
+\usepackage{multirow}
 
 
 
@@ -489,16 +491,113 @@ However, we could access the enrolment data from similar summer camps held at th
 \section{Methodology}
 \label{sec:metodologia}
 
-When looking for a high school where to perform the analysis, we have studied the context of the different places from these points of view:
+In order to check wether the factors analysed in Section \ref{sec:factores} are valid or not, a proper context must be found, so that results from the performed surveys can be compared with what has been foun in the literature. Therefore, in the search for a high school where to perform the analysis, we have studied the context of the different places from different points of view that are now described.
+
+\subsection{Socio-economic environment}
+
+It is important to know what is the socio-economic status of the students and their families, given that in Section \ref{sec:factores} it has been stated that the wealth of the families influences in the education of the children, and so it influences in the election of a certain degree, or to continue the studies at all.
+
+The neighborhood in which the school is situated, is the second more habitated in Granada (South of Spain), and holds both the traditionally workers neighborhood face, and a more modern and wealthy one, due to the placement of the Astrophysics Center or the main hospital of the city.
+
+\subsection{The centre}
+
+The resources of the studied centre are also influential, since a good equipment in subjects such as Computer Science or Technology makes easier to engage children into STEM degrees.
+
+In this way, the center, called ``Zaid\'{i}n-Vergeles'' \cite{iesZV:2013}, has 7.000 $m^2$ of extension with open and closed spaces. This high school opens during the whole day, because there are classes in the morning, and also during the afternoon. The courses available at Zaid\'{i}n-Vergeles are the whole secondary education, and vocational courses (see Appendix \ref{ap:courses} for more clarification about the educational system in Spain). As such, surveyed alumni are from a variety of age and social condition, mainly medium class. In addition, there is an active \textit{parents association} that promotes gender equality and colaborative initiatives, such as displays or conferences.
+
+The chosen high school has an ICT (Information and Communication Technologies) classroom for the upper secondary education courses. It has 23 computers, which makes the students to work in pairs. Although, in every normal classroom, there is at least one computer, placed on the teacher's table. The students of the vocational courses have access to classrooms with enough computers for each one, but some bring their own. Furthermore, there are laptops available to all teachers who request them, so that they can carry special or interactive activities in their classes.
+
+\subsection{The student body}
+
+Knowing the students is key for knowing the global status of the school before chosing the sample. The global sdistribution of students per course are displayed in Table \ref{tab:alumni}. In this table, it is necessary to distinguish between students from the technical courses. Therefore, inside the upper secondary courses, 92 out of 185 are studying ``science'', and 252 out of 802 students are in ``computer science'' or ``technology'' related vocational courses.
+
+\begin{table*}
+  \caption[Students per course at the surveyed high school]{Distribution of students per course at ``Zaid\'{i}n-Vergeles'', the high school where the surveys were performed. Approximate age is also indicated.}
+  \label{tab:alumni}
+
+  \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+      \textbf{Course} & \textbf{Number of students} & \textbf{Approx. Age} \\ \hline
+      ``E.S.O.''(Compulsory secondary education) & 243 & 12 - 18 \\ \hline
+      ``Bachillerato''(Upper secondary education) & 185 & 16 - 20 \\ \hline
+      ``Ciclos Formativos''(Vocational courses) (medium) & 19 & 16 -  \\ \hline
+      ``Ciclos Formativos''(Vocational courses) (high) & 802 & 18 -  \\
+    \hline
+    \end{tabular}
+  \end{center}
+\end{table*}
+
+\subsection{Academics}
+
+In some way, the teachers are also related to the resources, or can be considered resources themselves. In addition, it is of interest to this study the analysis of the ratio between female and male STEM teachers, so that it can be studied if the students have STEM women as role models. At the studied high schoool, the ratio between men and women, in the departments we are interested in, is described if Figure \ref{fig:teachers}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/profes_ieszv.png}
+  \caption{Distribution of gender among the teachers from deparments related to technology or computer science.}
+  \label{fig:teachers}
+\end{figure}
+
+
+The students undertook the survey while they where at class, and the classes visited where always related to Technology or Computer science. The courses range from the last of high school to technical courses for undergraduates. In addition, the surveys were carried on two different academic years, 2015-2016 and 2016-2017, to ensure a bigger sample. The total amount of students and the distribution is detailed in Table \ref{tab:muestra}.
+
+\begin{table*}
+  \caption[Students who undertook the surveys]{Distribution of students per course where the survey was undertaken.}
+  \label{tab:muestra}
+
+  \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \multirow{2}{*}{Course} & \multicolumn{2}{c|}{Number of students} \\ \cline{2-3}
+           & 2015-2016          & 2016-2017          \\ \hline
+    Compulsory secondary education, years 3 and 4 & 63 &  \\ \hline
+    Upper secondary education, both years & 36 &  \\ \hline
+    Vocational courses & 50 &  \\
+    \hline
+    \end{tabular}
+  \end{center}
+\end{table*}
+
+Following the indications given in \cite{cohen2013research}, the questions and answers of the research have been built taking into account that:
 
 \begin{itemize}
-	\item \underline{Socio-economic environment}, which is important to know, given that in Section \ref{sec:factores} it has been stated that the wealth of the families influences in the education of the children, and so it influences in the election of a certain degree, or to continue the studies at all.
-	\item \underline{The centre}, which resources are also influential, since a good equipment in subjects such as Computer Science or Technology makes easier to engage children into STEM degrees.
-	\item \underline{The student body}, that is key for knowing the global status of the school, before chosing the sample.
-	\item \underline{Academics}, who are also related to the resources, or are considered resources themselves. In addition, it is of interest to this study the analysis of the ratio between female and male STEM teachers, so that it can be studied if the students have STEM women as role models.
+  \item 
 \end{itemize}
 
-The students undertook the survey while they where at class, and the classes visited where always related to Technology or Computer science. The courses range from the last of high school to technical courses for undergraduates. The total amount of students and the distribution is detailed in Table \ref{tab:muestra}.
+Therefore, the surveys have a total of 15 questions, and are available online as they have been created with the Google Forms tool \footnote{\url{https:\\drive.google.com}}. There are three different surveys; one for the compulsory secondary education courses, another for the upper secondary education courses, and the third one for the vocational courses. Although, all of them have the same head and introduction - briefly explaining the purpose of the survey -, and the questions are mostly alike, but there are particular differences in the answers when asking about their future plans. There are three types of questions: multiple choice, numeric scale, and multiple selection. Inside the multiple choice ones, they can be presented in a simple way, meaning that there is a question and two or more answer, one of which the student has to choose; or in the form of a table, where the rows are different but related questions and the colums represent the answers, being these either a sentence, a word, or a number.
+
+In the next Section we will analyse the results globally, but worth mentioning cases will also be commented.
+
+\section{Results}
+\label{sec:results}
+
+The tool used to create the surveys offers a graphic summary of the responses, however, as in some cases we would like to observe the comparison between courses, a processing of the raw data is mandatory. Therefore, and to start with, the distribution of boys and girls who have been surveyed per course is depicted in Figure \ref{fig:alumni}. It can be observed that the percentage of female students quickly falls as the course level grow, being less than 10\% in the vocational courses, the same found in science degrees as presented in Section \ref{sec:intro}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/alumnos_as.png}
+  \caption{Distribution of gender among the students surveyed, per course. Both courses 2015-2016 and 2016-2017 are unified.}
+  \label{fig:alumni}
+\end{figure}
+
+When asked about their future plans, either if they will continue studying or not, and if the chosen studies will be STEM related, a summary of the responses is depicted in Figure \ref{fig:future}. In this figure, the first two blocks starting from the bottom are immediate higher education in a STEM-related course, and the last one (top of the columns) is the possibility of not studying and look for work instead. It is a logical result that the higher the course is, the most likely is that the students think about working more than to continue studying.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/eleccion.png}
+  \caption{Responses to \textit{``If you had to choose right know, what will you do?''} per course. The first two blocks starting from the bottom are immediate higher education in a STEM-related course, and the last one (top of the columns) is the possibility of not studying and look for work instead.}
+  \label{fig:future}
+\end{figure}
+
+Another interesting comparison is the opinion of the students about the engineers and the work they perform. To gather their opinions a mutiple choice table was built, presenting a set of statements, to which the students had to mark if they agreed or disagreed (an \textit{``NS/NC''} option was also included). In Figure \ref{fig:opinions} we show a summary of the students' opinions about (from the botton to the top) whether an engineer has social prestige, has a good salary, has a creative job, their job is easy, has a good work schedule, and their work has an impact on the society. Only ``I agree'' responses have been taken into account for the sake of clarity in the graphic. It can be seen that in general, all surveyed students have a good opinion of what an engineer represents to the society and about the possibilities and creativity of their jobs. For the vocational courses, the thought of the engineers having good salaries highly decreases, which may be due to some of the students having already worked in STEM companies and experienced bad conditions. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/opiniones.png}
+  \caption{Responses to different statements made about an engineer per course. Students might agree, disagree, or choose not to give their opinion. Blocks from the bottom to the top are related to if the students think that whether an engineer has social prestige, has a good salary, has a creative job, their job is easy, has a good work schedule, and their work has an impact on the society.}
+  \label{fig:opinions}
+\end{figure}
 
 %\begin{table}
 %	\caption{{\scriptsize Distribution of surveyed students by academic year.}}
@@ -662,8 +761,7 @@ The conclusion goes here.
 % use section* for acknowledgment
 \section*{Acknowledgment}
 
-
-The authors would like to thank...
+The authors would like to thank to the high school ``Zaid\'{i}n-Vergeles'' for their collaboration during the performance of the surveys.
 
 
 % Can use something like this to put references on a page
