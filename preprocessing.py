@@ -46,7 +46,7 @@ def obtain_array_indexes(responses, database):
 def fill_value(column, aList):
     if aList:
         if len(aList) > 1:
-            return 1 if column in aList[0] or aList[1] else 0
+            return 1 if column in aList[0] or column in aList[1] else 0
         else:
             return 1 if column in aList[0] else 0
     else: return 0
