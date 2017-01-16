@@ -1,18 +1,20 @@
-# Reading responses from Z-V
-responsesESOZV_csv <- "/home/osica/Github/IEEE-Transactions-on-Education/Respuestas - ESO.csv"
-responsesBachZV_csv <- "/home/osica/Github/IEEE-Transactions-on-Education/Respuestas - Bachillerato.csv"
-responsesCFZV_csv <- "/home/osica/Github/IEEE-Transactions-on-Education/Respuestas - Ciclos Formativos.csv"
+require(ggplot2)
 
-responsesESOZV <- read.table(file = responsesESOZV_csv, header = TRUE, sep = ",")
-responsesBachZV <- read.table(file = responsesBachZV_csv, header = TRUE, sep = ",")
-responsesCFZV <- read.table(file = responsesCFZV_csv, header = TRUE, sep = ",")
+# Reading responses from Z-V
+responsesESOZV_csv <- "Respuestas - ESO_processed.csv"
+responsesBachZV_csv <- "Respuestas - Bachillerato_processed.csv"
+responsesCFZV_csv <- "Respuestas - Ciclos Formativos_processed.csv"
+
+responsesESOZV <- read.table(file = responsesESOZV_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
+responsesBachZV <- read.table(file = responsesBachZV_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
+responsesCFZV <- read.table(file = responsesCFZV_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
 
 # Reading responses from La Madraza
-responsesBachLM_csv <- "/home/osica/Github/IEEE-Transactions-on-Education/Respuestas - La Madraza Bachillerato.csv"
+responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 
-responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",")
+responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
 
-theFuture <- factor(ifelse(responsesESOZV$Futuro == "Bachillerato de ciencias", "Yes", "No"))
-class(theFuture)
-plot(responsesESOZV$Mujer, theFuture)
 
+
+print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
+        geom_bar() + facet_grid(Girl ~ .))
