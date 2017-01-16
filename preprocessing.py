@@ -43,6 +43,15 @@ def obtain_array_indexes(responses, database):
 
     return indexes
 
+def fill_value(column, aList):
+    if aList:
+        if len(aList) > 1:
+            return 1 if column in aList[0] or aList[1] else 0
+        else:
+            return 1 if column in aList[0] else 0
+    else: return 0
+
+
 def main():
 
     if len(sys.argv) == 2:
@@ -67,8 +76,10 @@ def main():
             'Eng_for_men_bad', 'Eng_for_geeks_bad']
 
             csvWtriter = csv.DictWriter(csvOutputFile, fieldnames = variables)
+            csvWtriter.writeheader()
 
             for row in csvReader:
+                theList = obtain_variables_from_response(row)
                 csvWtriter.writerow({'Timestamp': row['Timestamp'],
                 'Girl': row['¿Eres mujer?'],
                 'Class': row['¿Qué proporción de chicos y chicas había en tu clase de tecnología/informática durante tu último curso?'],
@@ -92,17 +103,24 @@ def main():
                 'Easy_job': row['¿Qué opinas de los informáticos? [Su trabajo es muy fácil]'],
                 'Good_schedule': row['¿Qué opinas de los informáticos? [Tienen un buen horario laboral]'],
                 'Job_impact': row['¿Qué opinas de los informáticos? [Su trabajo tiene un gran impacto en la sociedad]'],
-                'Engineering': row['¿Te planteas los estudios superiores en una carrera tecnológica?']})
-                #,'Eng_easy_access', 'Eng_easy_study', 'Eng_im_capable',
-                #'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
-                #'Eng_for_men_good', 'Eng_for_geeks_good', 'Eng_not_easy_access',
-                #'Eng_not_easy_study', 'Eng_im_not_capable', 'Eng_opportunities_bad',
-                #'Eng_job_not_fast', 'Eng_not_interested', 'Eng_for_women_bad',
-                #'Eng_for_men_bad', 'Eng_for_geeks_bad'})
-
-                theList = obtain_variables_from_response(row)
-
-                
+                'Engineering': row['¿Te planteas los estudios superiores en una carrera tecnológica?'],
+                'Eng_easy_access': fill_value('Eng_easy_access', theList),
+                'Eng_easy_study': fill_value('Eng_easy_study', theList),
+                'Eng_im_capable': fill_value('Eng_im_capable', theList),
+                'Eng_opportunities_good': fill_value('Eng_opportunities_good', theList),
+                'Eng_job_fast': fill_value('Eng_job_fast', theList),
+                'Eng_for_women_good': fill_value('Eng_for_women_good', theList),
+                'Eng_for_men_good': fill_value('Eng_for_men_good', theList),
+                'Eng_for_geeks_good': fill_value('Eng_for_geeks_good', theList),
+                'Eng_not_easy_access': fill_value('Eng_not_easy_access', theList),
+                'Eng_not_easy_study': fill_value('Eng_not_easy_study', theList),
+                'Eng_im_not_capable': fill_value('Eng_im_not_capable', theList),
+                'Eng_opportunities_bad': fill_value('Eng_opportunities_bad', theList),
+                'Eng_job_not_fast': fill_value('Eng_job_not_fast', theList),
+                'Eng_not_interested': fill_value('Eng_not_interested', theList),
+                'Eng_for_women_bad': fill_value('Eng_for_women_bad', theList),
+                'Eng_for_men_bad': fill_value('Eng_for_men_bad', theList),
+                'Eng_for_geeks_bad': fill_value('Eng_for_geeks_bad', theList)})
     else:
         print ("Usa el método así: python preprocessing.py nombredelarchivo.csv")
         sys.exit()
