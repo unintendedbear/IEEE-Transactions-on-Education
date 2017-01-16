@@ -6,6 +6,43 @@ import sys
 import csv
 import os
 
+# Utility functions
+def obtain_variables_from_response(instance):
+    variableList = []
+    reasonsYES = [value.strip() for value in instance['Si has respondido que SÍ te los planteas, ¿por qué? (marca todas las que correspondan)'].split(',')]
+    reasonsNO = [value.strip() for value in instance['Si has respondido que NO te los planteas, ¿por qué? (marca todas las que correspondan)'].split(',')]
+    possibleYESanswers = ['Es fácil acceder a ellas', 'Son fáciles de acabar',
+    'Soy capaz de estudiarlas', 'Tienen muchas salidas profesionales',
+    'Sirven para encontrar trabajo rápidamente', 'Son carreras para mujeres',
+    'Son carreras para hombres', "Son careras para 'frikis'"]
+    possibleNOanswers = ['Es difícil acceder a ellas', 'Son difíciles de acabar',
+    'No soy capaz de estudiarlas', 'No tienen muchas salidas profesionales',
+    'No sirven para encontrar trabajo rápidamente', 'No me interesa',
+    'Son carreras para mujeres', 'Son carreras para hombres',
+    "Son careras para 'frikis'"]
+    variablesYES = ['Eng_easy_access', 'Eng_easy_study', 'Eng_im_capable',
+    'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
+    'Eng_for_men_good', 'Eng_for_geeks_good']
+    variablesNO = ['Eng_not_easy_access', 'Eng_not_easy_study',
+    'Eng_im_not_capable', 'Eng_opportunities_bad', 'Eng_job_not_fast',
+    'Eng_not_interested', 'Eng_for_women_bad', 'Eng_for_men_bad', 'Eng_for_geeks_bad']
+
+    if ([y for y in reasonsYES if y != '']):
+        variableList.append([variablesYES[j] for j in obtain_array_indexes(reasonsYES, possibleYESanswers)])
+
+    if ([x for x in reasonsNO if x != '']):
+        variableList.append([variablesNO[i] for i in obtain_array_indexes(reasonsNO, possibleNOanswers)])
+
+    return variableList
+
+def obtain_array_indexes(responses, database):
+    indexes = []
+
+    for response in responses:
+        indexes.append(database.index(response))
+
+    return indexes
+
 def main():
 
     if len(sys.argv) == 2:
@@ -26,14 +63,10 @@ def main():
             'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
             'Eng_for_men_good', 'Eng_for_geeks_good', 'Eng_not_easy_access',
             'Eng_not_easy_study', 'Eng_im_not_capable', 'Eng_opportunities_bad',
-            'Eng_job_not_fast', 'Eng_for_women_bad', 'Eng_for_men_bad',
-            'Eng_for_geeks_bad']
+            'Eng_job_not_fast', 'Eng_not_interested', 'Eng_for_women_bad',
+            'Eng_for_men_bad', 'Eng_for_geeks_bad']
 
             csvWtriter = csv.DictWriter(csvOutputFile, fieldnames = variables)
-
-            # FALTAN:
-            #'Si has respondido que NO te los planteas, ¿por qué? (marca todas las que correspondan)': 'No soy capaz de estudiarlas',
-            #'Si has respondido que SÍ te los planteas, ¿por qué? (marca todas las que correspondan)': '',
 
             for row in csvReader:
                 csvWtriter.writerow({'Timestamp': row['Timestamp'],
@@ -59,13 +92,17 @@ def main():
                 'Easy_job': row['¿Qué opinas de los informáticos? [Su trabajo es muy fácil]'],
                 'Good_schedule': row['¿Qué opinas de los informáticos? [Tienen un buen horario laboral]'],
                 'Job_impact': row['¿Qué opinas de los informáticos? [Su trabajo tiene un gran impacto en la sociedad]'],
-                'Engineering': row['¿Te planteas los estudios superiores en una carrera tecnológica?'],
-                'Eng_easy_access', 'Eng_easy_study', 'Eng_im_capable',
-                'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
-                'Eng_for_men_good', 'Eng_for_geeks_good', 'Eng_not_easy_access',
-                'Eng_not_easy_study', 'Eng_im_not_capable', 'Eng_opportunities_bad',
-                'Eng_job_not_fast', 'Eng_for_women_bad', 'Eng_for_men_bad',
-                'Eng_for_geeks_bad'})
+                'Engineering': row['¿Te planteas los estudios superiores en una carrera tecnológica?']})
+                #,'Eng_easy_access', 'Eng_easy_study', 'Eng_im_capable',
+                #'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
+                #'Eng_for_men_good', 'Eng_for_geeks_good', 'Eng_not_easy_access',
+                #'Eng_not_easy_study', 'Eng_im_not_capable', 'Eng_opportunities_bad',
+                #'Eng_job_not_fast', 'Eng_not_interested', 'Eng_for_women_bad',
+                #'Eng_for_men_bad', 'Eng_for_geeks_bad'})
+
+                theList = obtain_variables_from_response(row)
+
+                
     else:
         print ("Usa el método así: python preprocessing.py nombredelarchivo.csv")
         sys.exit()
