@@ -14,18 +14,20 @@ def obtain_variables_from_response(instance):
     possibleYESanswers = ['Es fácil acceder a ellas', 'Son fáciles de acabar',
     'Soy capaz de estudiarlas', 'Tienen muchas salidas profesionales',
     'Sirven para encontrar trabajo rápidamente', 'Son carreras para mujeres',
-    'Son carreras para hombres', "Son careras para 'frikis'"]
+    'Son carreras para hombres', "Son carreras para 'frikis'"]
     possibleNOanswers = ['Es difícil acceder a ellas', 'Son difíciles de acabar',
     'No soy capaz de estudiarlas', 'No tienen muchas salidas profesionales',
     'No sirven para encontrar trabajo rápidamente', 'No me interesa',
+    'Ya he hecho una Ingeniería/Ingeniería Técnica/Grado',
     'Son carreras para mujeres', 'Son carreras para hombres',
-    "Son careras para 'frikis'"]
+    "Son carreras para 'frikis'"]
     variablesYES = ['Eng_easy_access', 'Eng_easy_study', 'Eng_im_capable',
     'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
     'Eng_for_men_good', 'Eng_for_geeks_good']
     variablesNO = ['Eng_not_easy_access', 'Eng_not_easy_study',
     'Eng_im_not_capable', 'Eng_opportunities_bad', 'Eng_job_not_fast',
-    'Eng_not_interested', 'Eng_for_women_bad', 'Eng_for_men_bad', 'Eng_for_geeks_bad']
+    'Eng_not_interested', 'Eng_already', 'Eng_for_women_bad', 'Eng_for_men_bad',
+    'Eng_for_geeks_bad']
 
     if ([y for y in reasonsYES if y != '']):
         variableList.append([variablesYES[j] for j in obtain_array_indexes(reasonsYES, possibleYESanswers)])
@@ -51,6 +53,13 @@ def fill_value(column, aList):
             return 1 if column in aList[0] else 0
     else: return 0
 
+def find_interest(instance):
+    questionESO = '¿Cuánto dirías que te interesa la ingeniería?'
+    questionOthers = '¿Cuánto dirías que te interesaba la ingeniería durante la E.S.O?'
+    if questionESO in instance.keys():
+        return instance[questionESO]
+    else:
+        return instance[questionOthers]
 
 def main():
 
@@ -72,8 +81,8 @@ def main():
             'Eng_opportunities_good', 'Eng_job_fast', 'Eng_for_women_good',
             'Eng_for_men_good', 'Eng_for_geeks_good', 'Eng_not_easy_access',
             'Eng_not_easy_study', 'Eng_im_not_capable', 'Eng_opportunities_bad',
-            'Eng_job_not_fast', 'Eng_not_interested', 'Eng_for_women_bad',
-            'Eng_for_men_bad', 'Eng_for_geeks_bad']
+            'Eng_job_not_fast', 'Eng_not_interested', 'Eng_already',
+            'Eng_for_women_bad', 'Eng_for_men_bad', 'Eng_for_geeks_bad']
 
             csvWtriter = csv.DictWriter(csvOutputFile, fieldnames = variables)
             csvWtriter.writeheader()
@@ -87,7 +96,7 @@ def main():
                 'Talks_about_w': row['Indica si algunas de las siguientes actividades han tenido lugar en tu colegio o instituto [Charlas o discusiones sobre el trabajo de mujeres científicas o ingenieras]'],
                 'Talks_gendergap': row['Indica si algunas de las siguientes actividades han tenido lugar en tu colegio o instituto [Charlas o discusiones sobre la diferencia entre el número de hombres y mujeres en la ciencia o la ingeniería]'],
                 'Professors': row['¿Cómo han sido tus profesores/as en las asignaturas de tecnología/informática?'],
-                'Interest_eng': row['¿Cuánto dirías que te interesa la ingeniería?'],
+                'Interest_eng': find_interest(row),
                 'Maths': row['Indica tus nota media en las siguientes asignaturas (si alguna no la has tenido, no marques nada en esa asignatura) [Matemáticas]'],
                 'Physics': row['Indica tus nota media en las siguientes asignaturas (si alguna no la has tenido, no marques nada en esa asignatura) [Física]'],
                 'Tech': row['Indica tus nota media en las siguientes asignaturas (si alguna no la has tenido, no marques nada en esa asignatura) [Tecnología]'],
@@ -118,6 +127,7 @@ def main():
                 'Eng_opportunities_bad': fill_value('Eng_opportunities_bad', theList),
                 'Eng_job_not_fast': fill_value('Eng_job_not_fast', theList),
                 'Eng_not_interested': fill_value('Eng_not_interested', theList),
+                'Eng_already': fill_value('Eng_already', theList),
                 'Eng_for_women_bad': fill_value('Eng_for_women_bad', theList),
                 'Eng_for_men_bad': fill_value('Eng_for_men_bad', theList),
                 'Eng_for_geeks_bad': fill_value('Eng_for_geeks_bad', theList)})
