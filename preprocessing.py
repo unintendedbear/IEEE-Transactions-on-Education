@@ -132,7 +132,7 @@ def main():
                 'Eng_for_men_bad': fill_value('Eng_for_men_bad', theList),
                 'Eng_for_geeks_bad': fill_value('Eng_for_geeks_bad', theList)})
     else:
-        print ("Usa el método así: python preprocessing.py nombredelarchivo.csv")
+        print ("Use of the script: python preprocessing.py csvfile.csv")
         sys.exit()
 
 if __name__=="__main__":
