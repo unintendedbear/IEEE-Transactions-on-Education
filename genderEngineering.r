@@ -1,4 +1,5 @@
 require(ggplot2)
+require(dplyr)
 
 # Reading responses from Z-V
 responsesESOZV_csv <- "Respuestas - ESO_processed.csv"
@@ -13,6 +14,20 @@ responsesCFZV <- read.table(file = responsesCFZV_csv, header = TRUE, sep = ",", 
 responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 
 responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
+
+#Analysing opinions about engineers
+responsesF <- filter(responsesESOZV, responsesESOZV$Girl == "Sí")
+responsesM <- filter(responsesESOZV, responsesESOZV$Girl == "No")
+score <- 0
+for (response in responsesF$Social_acceptance) {
+  if ("Sí" %in% response) {
+    score <- score + 1
+  }
+  if ("No" %in% response) {
+    score <- score - 1
+  }
+}
+print(score)
 
 #Bar chart
 print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
