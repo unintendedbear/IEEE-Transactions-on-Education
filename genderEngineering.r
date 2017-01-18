@@ -1,6 +1,8 @@
 require(ggplot2)
 require(dplyr)
 
+setwd('~/Github/IEEE-Transactions-on-Education/')
+
 # Reading responses from Z-V
 responsesESOZV_csv <- "Respuestas - ESO_processed.csv"
 responsesBachZV_csv <- "Respuestas - Bachillerato_processed.csv"
@@ -31,8 +33,14 @@ print(score)
 
 #Bar chart
 print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
-        geom_bar() + facet_grid(Girl ~ .))
+        geom_bar() + facet_grid(Girl ~ .) + labs(title="E.S.O. responses"))
+print(ggplot(data=subset(responsesBachZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
+        geom_bar() + facet_grid(Girl ~ .) + labs(title="Bachillerato responses"))
+print(ggplot(data=subset(responsesCFZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
+        geom_bar() + facet_grid(Girl ~ .) + labs(title="Vocational courses responses"))
+print(ggplot(data=subset(responsesBachLM, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
+        geom_bar() + facet_grid(Girl ~ .) + labs(title="Bachillerato responses (La Madraza)"))
 #Dot chart
 print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance, ..count.. ) ) +
         geom_point(stat = "count", size = 3) + coord_flip() +
-        facet_grid(Girl ~ .))
+        facet_grid(Girl ~ .) + labs(title="E.S.O. responses"))
