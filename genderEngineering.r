@@ -1,7 +1,7 @@
 require(ggplot2)
 require(dplyr)
 
-setwd('~/Github/IEEE-Transactions-on-Education/')
+setwd('~/Github/IEEE-Transactions-on-Education/respuestas/')
 
 # Reading responses from Z-V
 responsesESOZV_csv <- "Respuestas - ESO_processed.csv"
@@ -17,30 +17,42 @@ responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 
 responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
 
-#Analysing opinions about engineers
-responsesF <- filter(responsesESOZV, responsesESOZV$Girl == "Sí")
-responsesM <- filter(responsesESOZV, responsesESOZV$Girl == "No")
-score <- 0
-for (response in responsesF$Social_acceptance) {
-  if ("Sí" %in% response) {
-    score <- score + 1
-  }
-  if ("No" %in% response) {
-    score <- score - 1
-  }
-}
-print(score)
+# Analysing opinions about engineers
+opinionsESOZV <- melt(responsesESOZV,id.vars=names(t)[2],measure.vars = names(t)[18:23])
+opinionsBachZV <- melt(responsesBachZV,id.vars=names(t)[2],measure.vars = names(t)[18:23])
+opinionsCFZV <- melt(responsesCFZV,id.vars=names(t)[2],measure.vars = names(t)[18:23])
+opinionsBachLM <- melt(responsesBachLM,id.vars=names(t)[2],measure.vars = names(t)[18:23])
 
-#Bar chart
-print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
-        geom_bar() + facet_grid(Girl ~ .) + labs(title="E.S.O. responses"))
-print(ggplot(data=subset(responsesBachZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
-        geom_bar() + facet_grid(Girl ~ .) + labs(title="Bachillerato responses"))
-print(ggplot(data=subset(responsesCFZV, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
-        geom_bar() + facet_grid(Girl ~ .) + labs(title="Vocational courses responses"))
-print(ggplot(data=subset(responsesBachLM, !is.na(Social_acceptance)), aes(Social_acceptance) ) +
-        geom_bar() + facet_grid(Girl ~ .) + labs(title="Bachillerato responses (La Madraza)"))
-#Dot chart
-print(ggplot(data=subset(responsesESOZV, !is.na(Social_acceptance)), aes(Social_acceptance, ..count.. ) ) +
-        geom_point(stat = "count", size = 3) + coord_flip() +
-        facet_grid(Girl ~ .) + labs(title="E.S.O. responses"))
+# Cleaning
+opinionsESOZV <- opinionsESOZV[!is.na(opinionsESOZV$Girl),]
+opinionsESOZV <- opinionsESOZV[!is.na(opinionsESOZV$variable),]
+opinionsESOZV <- opinionsESOZV[!is.na(opinionsESOZV$value),]
+opinionsBachZV <- opinionsESOZV[!is.na(opinionsBachZV$Girl),]
+opinionsBachZV <- opinionsESOZV[!is.na(opinionsBachZV$variable),]
+opinionsBachZV <- opinionsESOZV[!is.na(opinionsBachZV$value),]
+opinionsCFZV <- opinionsESOZV[!is.na(opinionsCFZV$Girl),]
+opinionsCFZV <- opinionsESOZV[!is.na(opinionsCFZV$variable),]
+opinionsCFZV <- opinionsESOZV[!is.na(opinionsCFZV$value),]
+opinionsBachLM <- opinionsESOZV[!is.na(opinionsBachLM$Girl),]
+opinionsBachLM <- opinionsESOZV[!is.na(opinionsBachLM$variable),]
+opinionsBachLM <- opinionsESOZV[!is.na(opinionsBachLM$value),]
+
+# Variables and Values into factors
+opinionsESOZV$value <- factor(opinionsESOZV$value,levels = c("Sí","No","No lo sé"))
+opinionsESOZV$variable <- factor(opinionsESOZV$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
+opinionsBachZV$value <- factor(opinionsBachZV$value,levels = c("Sí","No","No lo sé"))
+opinionsBachZV$variable <- factor(opinionsBachZV$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
+opinionsCFZV$value <- factor(opinionsCFZV$value,levels = c("Sí","No","No lo sé"))
+opinionsCFZV$variable <- factor(opinionsCFZV$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
+opinionsBachLM$value <- factor(opinionsBachLM$value,levels = c("Sí","No","No lo sé"))
+opinionsBachLM$variable <- factor(opinionsBachLM$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
+
+# Opinion Graphs
+graphESOZV <- ggplot(opinionsESOZV[!is.na(opinionsESOZV$variable),],aes(x=value,y=..density..,group=Girl,fill=Girl))+ stat_density() + facet_grid(. ~ variable, scales = "free_y")
+graphBachZV <- ggplot(opinionsBachZV[!is.na(opinionsBachZV$variable),],aes(x=value,y=..density..,group=Girl,fill=Girl))+ stat_density() + facet_grid(. ~ variable, scales = "free_y")
+graphCFZV <- ggplot(opinionsCFZV[!is.na(opinionsCFZV$variable),],aes(x=value,y=..density..,group=Girl,fill=Girl))+ stat_density() + facet_grid(. ~ variable, scales = "free_y")
+graphBachLM <- ggplot(opinionsBachLM[!is.na(opinionsBachZV$variable),],aes(x=value,y=..density..,group=Girl,fill=Girl))+ stat_density() + facet_grid(. ~ variable, scales = "free_y")
+print(graphESOZV)
+print(graphBachZV)
+print(graphCFZV)
+print(graphBachLM)
