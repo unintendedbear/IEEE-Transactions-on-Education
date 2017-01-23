@@ -15,15 +15,15 @@ responsesCFZV <- read.table(file = responsesCFZV_csv, header = TRUE, sep = ",", 
 # Reading responses from La Madraza
 responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
+responsesBachZV <- rbind(responsesBachZV, responsesBachLM)
 
 # Adding new column to identify the course
 responsesESOZV$Course <- "Compulsory secondary ed."
 responsesBachZV$Course <- "Upper secondary ed."
 responsesCFZV$Course <- "Vocational courses"
-responsesBachLM$Course <- "Upper secondary ed. LM"
 
 # All data together
-allResponses <- rbind(responsesESOZV, responsesBachZV, responsesCFZV, responsesBachLM)
+allResponses <- rbind(responsesESOZV, responsesBachZV, responsesCFZV)
 
 # Analysing opinions about engineers
 allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(2,43)],measure.vars = names(allResponses)[18:23])
