@@ -17,6 +17,10 @@ responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
 responsesBachZV <- rbind(responsesBachZV, responsesBachLM)
 
+# Copying responsesBach and responsesESO to work with them later on
+responsesBach_aux <- responsesBachZV
+responsesESO_aux <- responsesESOZV
+
 # Adding new column to identify the course
 responsesESOZV$Course <- "Compulsory secondary ed."
 responsesBachZV$Course <- "Upper secondary ed."
@@ -79,10 +83,42 @@ allResponses$Eng_is_for_Geeks <- "Neutral"
 allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree"
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
 
+# Adding columns to group choices about future studies
+responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Future_studies),] # Cleaning, first
+responsesBach_aux$Immediate_future_plans <- "Work/Others"
+responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[1],"Immediate_future_plans"] <- "Tech related studies"
+responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[5],"Immediate_future_plans"] <- "Tech related studies"
+responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[2],"Immediate_future_plans"] <- "Other studies (not tech)"
+responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[3],"Immediate_future_plans"] <- "Other studies (not tech)"
+
+# Grouping and translating STEM courses scoring
+responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Maths),]
+responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Physics),]
+responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Tech),]
+responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Computer_science),] # Cleaning, first
+levels(responsesBach_aux$Maths) <- c(levels(responsesBach_aux$Maths), "Fail", "Average", "A+")
+levels(responsesBach_aux$Physics) <- c(levels(responsesBach_aux$Physics), "Fail", "Average", "A+")
+levels(responsesBach_aux$Tech) <- c(levels(responsesBach_aux$Tech), "Fail", "Average", "A+")
+levels(responsesBach_aux$Computer_science) <- c(levels(responsesBach_aux$Computer_science), "Fail", "Average", "A+")
+responsesBach_aux$Maths[responsesBach_aux$Maths == "Suspenso"] <- "Fail"
+responsesBach_aux$Maths[responsesBach_aux$Maths == "Aprobado bajo" | responsesBach_aux$Maths == "Aprobado alto"] <- "Average"
+responsesBach_aux$Maths[responsesBach_aux$Maths == "Notable" | responsesBach_aux$Maths == "Sobresaliente"] <- "A+"
+responsesBach_aux$Physics[responsesBach_aux$Physics == "Suspenso"] <- "Fail"
+responsesBach_aux$Physics[responsesBach_aux$Physics == "Aprobado bajo" | responsesBach_aux$Physics == "Aprobado alto"] <- "Average"
+responsesBach_aux$Physics[responsesBach_aux$Physics == "Notable" | responsesBach_aux$Physics == "Sobresaliente"] <- "A+"
+responsesBach_aux$Tech[responsesBach_aux$Tech == "Suspenso"] <- "Fail"
+responsesBach_aux$Tech[responsesBach_aux$Tech == "Aprobado bajo" | responsesBach_aux$Tech == "Aprobado alto"] <- "Average"
+responsesBach_aux$Tech[responsesBach_aux$Tech == "Notable" | responsesBach_aux$Tech == "Sobresaliente"] <- "A+"
+responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Suspenso"] <- "Fail"
+responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Aprobado bajo" | responsesBach_aux$Computer_science == "Aprobado alto"] <- "Average"
+responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Notable" | responsesBach_aux$Computer_science == "Sobresaliente"] <- "A+"
+
 # Analysing opinions about engineers
 allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(2,43)],measure.vars = names(allResponses)[18:23])
 # Analysing opinions about engineering
 allOpinionsEng <- melt(allResponses,id.vars=names(allResponses)[c(2,43)],measure.vars = names(allResponses)[44:47])
+# All future choices in Bachillerato (upper secondary education)
+futureChoiceBach <- melt(responsesBach_aux, id.vars = names(responsesBach_aux)[c(2,43)], measure.vars = names(responsesBach_aux)[9:12])
 
 # Cleaning
 allOpinions <- allOpinions[!is.na(allOpinions$Girl),]
@@ -102,6 +138,9 @@ allOpinions[allOpinions$Girl == unique(allOpinions$Girl)[2],"Gender"] <- "Female
 allOpinionsEng$Gender <- "None"
 allOpinionsEng[allOpinionsEng$Girl == unique(allOpinionsEng$Girl)[1],"Gender"] <- "Male"
 allOpinionsEng[allOpinionsEng$Girl == unique(allOpinionsEng$Girl)[2],"Gender"] <- "Female"
+futureChoiceBach$Gender <- "None"
+futureChoiceBach[futureChoiceBach$Girl == unique(futureChoiceBach$Girl)[1],"Gender"] <- "Male"
+futureChoiceBach[futureChoiceBach$Girl == unique(futureChoiceBach$Girl)[2],"Gender"] <- "Female"
 
 # Variables and Values into factors
 allOpinions$value <- factor(allOpinions$value,levels = c("Agree","Neutral", "Disagree"))
@@ -126,7 +165,16 @@ graphAll2 <- ggplot(allOpinionsEng[allOpinionsEng$value != "Neutral",],aes(x=val
   ylab("Density") +
   ggtitle("Feelings about studying an engineering")
 
+graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
+  stat_density() +
+  facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
+  xlab("Scoring") +
+  ylab("Density") +
+  ggtitle("What will students do in the future vs. their scoring in STEM")
+
 print(graphAll)
 print(graphAll2)
+print(graphFuture)
 ggsave("engineer_opinions.png", plot = graphAll, scale = 1.75)
 ggsave("engineering_opinions.png", plot = graphAll2, scale = 1.75)
+ggsave("future_vs_scoringSTEM.png", plot = graphAll2, scale = 1.5)
