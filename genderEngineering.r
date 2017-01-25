@@ -17,10 +17,6 @@ responsesBachLM_csv <- "Respuestas - La Madraza Bachillerato_processed.csv"
 responsesBachLM <- read.table(file = responsesBachLM_csv, header = TRUE, sep = ",", na.strings=c(""," ","NA"))
 responsesBachZV <- rbind(responsesBachZV, responsesBachLM)
 
-# Copying responsesBach and responsesESO to work with them later on
-responsesBach_aux <- responsesBachZV
-responsesESO_aux <- responsesESOZV
-
 # Adding new column to identify the course
 responsesESOZV$Course <- "Compulsory secondary ed."
 responsesBachZV$Course <- "Upper secondary ed."
@@ -28,6 +24,11 @@ responsesCFZV$Course <- "Vocational courses"
 
 # All data together
 allResponses <- rbind(responsesESOZV, responsesBachZV, responsesCFZV)
+# Translating "Girl" column into "Gender" column
+allResponses <- allResponses[!is.na(allResponses$Girl),]
+allResponses$Gender <- "None"
+allResponses[allResponses$Girl == unique(allResponses$Girl)[1],"Gender"] <- "Male"
+allResponses[allResponses$Girl == unique(allResponses$Girl)[2],"Gender"] <- "Female"
 
 # Adding columns to group feelings about engineering
 allResponses$I_am_capable <- "Neutral"
@@ -84,47 +85,45 @@ allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
 
 # Adding columns to group choices about future studies
-responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Future_studies),] # Cleaning, first
-responsesBach_aux$Immediate_future_plans <- "Work/Others"
-responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[1],"Immediate_future_plans"] <- "Tech related studies"
-responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[5],"Immediate_future_plans"] <- "Tech related studies"
-responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[2],"Immediate_future_plans"] <- "Other studies (not tech)"
-responsesBach_aux[responsesBach_aux$Future_studies == unique(responsesBach_aux$Future_studies)[3],"Immediate_future_plans"] <- "Other studies (not tech)"
+allResponses <- allResponses[!is.na(allResponses$Future_studies),] # Cleaning, first
+allResponses$Immediate_future_plans <- "Work/Others"
+allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[1],"Immediate_future_plans"] <- "Tech related studies"
+allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[5],"Immediate_future_plans"] <- "Tech related studies"
+allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[2],"Immediate_future_plans"] <- "Other studies (not tech)"
+allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[3],"Immediate_future_plans"] <- "Other studies (not tech)"
 
 # Grouping and translating STEM courses scoring
-responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Maths),]
-responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Physics),]
-responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Tech),]
-responsesBach_aux <- responsesBach_aux[!is.na(responsesBach_aux$Computer_science),] # Cleaning, first
-levels(responsesBach_aux$Maths) <- c(levels(responsesBach_aux$Maths), "Fail", "Average", "A+")
-levels(responsesBach_aux$Physics) <- c(levels(responsesBach_aux$Physics), "Fail", "Average", "A+")
-levels(responsesBach_aux$Tech) <- c(levels(responsesBach_aux$Tech), "Fail", "Average", "A+")
-levels(responsesBach_aux$Computer_science) <- c(levels(responsesBach_aux$Computer_science), "Fail", "Average", "A+")
-responsesBach_aux$Maths[responsesBach_aux$Maths == "Suspenso"] <- "Fail"
-responsesBach_aux$Maths[responsesBach_aux$Maths == "Aprobado bajo" | responsesBach_aux$Maths == "Aprobado alto"] <- "Average"
-responsesBach_aux$Maths[responsesBach_aux$Maths == "Notable" | responsesBach_aux$Maths == "Sobresaliente"] <- "A+"
-responsesBach_aux$Physics[responsesBach_aux$Physics == "Suspenso"] <- "Fail"
-responsesBach_aux$Physics[responsesBach_aux$Physics == "Aprobado bajo" | responsesBach_aux$Physics == "Aprobado alto"] <- "Average"
-responsesBach_aux$Physics[responsesBach_aux$Physics == "Notable" | responsesBach_aux$Physics == "Sobresaliente"] <- "A+"
-responsesBach_aux$Tech[responsesBach_aux$Tech == "Suspenso"] <- "Fail"
-responsesBach_aux$Tech[responsesBach_aux$Tech == "Aprobado bajo" | responsesBach_aux$Tech == "Aprobado alto"] <- "Average"
-responsesBach_aux$Tech[responsesBach_aux$Tech == "Notable" | responsesBach_aux$Tech == "Sobresaliente"] <- "A+"
-responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Suspenso"] <- "Fail"
-responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Aprobado bajo" | responsesBach_aux$Computer_science == "Aprobado alto"] <- "Average"
-responsesBach_aux$Computer_science[responsesBach_aux$Computer_science == "Notable" | responsesBach_aux$Computer_science == "Sobresaliente"] <- "A+"
+allResponses <- allResponses[!is.na(allResponses$Maths),]
+allResponses <- allResponses[!is.na(allResponses$Physics),]
+allResponses <- allResponses[!is.na(allResponses$Tech),]
+allResponses <- allResponses[!is.na(allResponses$Computer_science),] # Cleaning, first
+levels(allResponses$Maths) <- c(levels(allResponses$Maths), "Fail", "Average", "A+")
+levels(allResponses$Physics) <- c(levels(allResponses$Physics), "Fail", "Average", "A+")
+levels(allResponses$Tech) <- c(levels(allResponses$Tech), "Fail", "Average", "A+")
+levels(allResponses$Computer_science) <- c(levels(allResponses$Computer_science), "Fail", "Average", "A+")
+allResponses$Maths[allResponses$Maths == "Suspenso"] <- "Fail"
+allResponses$Maths[allResponses$Maths == "Aprobado bajo" | allResponses$Maths == "Aprobado alto"] <- "Average"
+allResponses$Maths[allResponses$Maths == "Notable" | allResponses$Maths == "Sobresaliente"] <- "A+"
+allResponses$Physics[allResponses$Physics == "Suspenso"] <- "Fail"
+allResponses$Physics[allResponses$Physics == "Aprobado bajo" | allResponses$Physics == "Aprobado alto"] <- "Average"
+allResponses$Physics[allResponses$Physics == "Notable" | allResponses$Physics == "Sobresaliente"] <- "A+"
+allResponses$Tech[allResponses$Tech == "Suspenso"] <- "Fail"
+allResponses$Tech[allResponses$Tech == "Aprobado bajo" | allResponses$Tech == "Aprobado alto"] <- "Average"
+allResponses$Tech[allResponses$Tech == "Notable" | allResponses$Tech == "Sobresaliente"] <- "A+"
+allResponses$Computer_science[allResponses$Computer_science == "Suspenso"] <- "Fail"
+allResponses$Computer_science[allResponses$Computer_science == "Aprobado bajo" | allResponses$Computer_science == "Aprobado alto"] <- "Average"
+allResponses$Computer_science[allResponses$Computer_science == "Notable" | allResponses$Computer_science == "Sobresaliente"] <- "A+"
 
 # Analysing opinions about engineers
-allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(2,43)],measure.vars = names(allResponses)[18:23])
+allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[18:23])
 # Analysing opinions about engineering
-allOpinionsEng <- melt(allResponses,id.vars=names(allResponses)[c(2,43)],measure.vars = names(allResponses)[44:47])
+allOpinionsEng <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[45:48])
 # All future choices in Bachillerato (upper secondary education)
-futureChoiceBach <- melt(responsesBach_aux, id.vars = names(responsesBach_aux)[c(2,43)], measure.vars = names(responsesBach_aux)[9:12])
+futureChoiceBach <- melt(allResponses[allResponses$Course == "Upper secondary ed."], id.vars = names(allResponses)[c(44,48)], measure.vars = names(allResponses)[9:12])
 
 # Cleaning
-allOpinions <- allOpinions[!is.na(allOpinions$Girl),]
 allOpinions <- allOpinions[!is.na(allOpinions$variable),]
 allOpinions <- allOpinions[!is.na(allOpinions$value),]
-allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$Girl),]
 allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$variable),]
 allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$value),]
 
@@ -132,15 +131,6 @@ allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$value),]
 allOpinions[allOpinions$value == unique(allOpinions$value)[1],"value"] <- "Agree"
 allOpinions[allOpinions$value == unique(allOpinions$value)[2],"value"] <- "Neutral"
 allOpinions[allOpinions$value == unique(allOpinions$value)[3],"value"] <- "Disagree"
-allOpinions$Gender <- "None"
-allOpinions[allOpinions$Girl == unique(allOpinions$Girl)[1],"Gender"] <- "Male"
-allOpinions[allOpinions$Girl == unique(allOpinions$Girl)[2],"Gender"] <- "Female"
-allOpinionsEng$Gender <- "None"
-allOpinionsEng[allOpinionsEng$Girl == unique(allOpinionsEng$Girl)[1],"Gender"] <- "Male"
-allOpinionsEng[allOpinionsEng$Girl == unique(allOpinionsEng$Girl)[2],"Gender"] <- "Female"
-futureChoiceBach$Gender <- "None"
-futureChoiceBach[futureChoiceBach$Girl == unique(futureChoiceBach$Girl)[1],"Gender"] <- "Male"
-futureChoiceBach[futureChoiceBach$Girl == unique(futureChoiceBach$Girl)[2],"Gender"] <- "Female"
 
 # Variables and Values into factors
 allOpinions$value <- factor(allOpinions$value,levels = c("Agree","Neutral", "Disagree"))
