@@ -151,6 +151,15 @@ allOpinionsEng$variable <- factor(allOpinionsEng$variable,levels = c("Eng_Good_D
 allOpinionsEng$Course <- factor(allOpinionsEng$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
 futureChoiceESO$value <- factor(futureChoiceESO$value,levels = c("Agree","Neutral", "Disagree"))
 
+# Gender distribution
+graphGender <- ggplot(allResponses, aes(Course)) +
+  geom_bar(aes(fill = Gender)) +
+  xlab("Course") +
+  ylab("Count") +
+  ggtitle("Gender distribution among the courses")
+#print(graphGender)
+ggsave("gender_distribution.png", plot = graphGender)
+
 # Opinion Graphs
 graphAll <- ggplot(allOpinions,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
   stat_density() +
@@ -163,7 +172,7 @@ graphAll2 <- ggplot(allOpinionsEng[allOpinionsEng$value != "Neutral",],aes(x=val
   geom_bar(position="fill") +
   facet_grid(Course ~ variable, scales = "free_y") +
   xlab("Opinion") +
-  ylab("Density") +
+  ylab("Count") +
   ggtitle("Feelings about studying an engineering")
 
 graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
@@ -177,13 +186,13 @@ graphFuturevsOpinion <- ggplot(futureChoiceESO,aes(x=value,y=..count..,group=Gen
   geom_bar(position="fill") +
   facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
   xlab("Opinion") +
-  ylab("Density") +
+  ylab("Count") +
   ggtitle("What will students do in the future vs. their opinions")
 
-print(graphAll)
-print(graphAll2)
-print(graphFuture)
-print(graphFuturevsOpinion)
+#print(graphAll)
+#print(graphAll2)
+#print(graphFuture)
+#print(graphFuturevsOpinion)
 ggsave("engineer_opinions.png", plot = graphAll, scale = 1.75)
 ggsave("engineering_opinions.png", plot = graphAll2, scale = 1.75)
 ggsave("future_vs_scoringSTEM.png", plot = graphFuture, scale = 1.5)
