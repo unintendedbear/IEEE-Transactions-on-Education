@@ -193,10 +193,10 @@ print(graphFuturevsOpinion_alt)
 ggsave("future_vs_opinion.png", plot = graphFuturevsOpinion_alt)
 
 # Grouping and translating STEM courses scoring
-allResponses <- allResponses[!is.na(allResponses$Maths),]
-allResponses <- allResponses[!is.na(allResponses$Physics),]
-allResponses <- allResponses[!is.na(allResponses$Tech),]
-allResponses <- allResponses[!is.na(allResponses$Computer_science),] # Cleaning, first
+#allResponses <- allResponses[!is.na(allResponses$Maths),]
+#allResponses <- allResponses[!is.na(allResponses$Physics),]
+#allResponses <- allResponses[!is.na(allResponses$Tech),]
+#allResponses <- allResponses[!is.na(allResponses$Computer_science),] # Cleaning, first
 levels(allResponses$Maths) <- c(levels(allResponses$Maths), "Fail", "Average", "A+")
 levels(allResponses$Physics) <- c(levels(allResponses$Physics), "Fail", "Average", "A+")
 levels(allResponses$Tech) <- c(levels(allResponses$Tech), "Fail", "Average", "A+")
@@ -216,7 +216,8 @@ allResponses$Computer_science[allResponses$Computer_science == "Notable" | allRe
 
 # All future choices in Bachillerato (upper secondary education)
 #futureChoiceBach <- melt(allResponses[allResponses$Course == "Upper secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[9:12])
-futureChoiceBach_alt <- melt(allResponses[allResponses$Course == "Compulsory secondary ed.",], id.vars = names(allResponses)[c(44,24)], measure.vars = names(allResponses)[9:12])
+futureChoiceBach_alt <- melt(allResponses, id.vars = names(allResponses)[c(43,44,24)], measure.vars = names(allResponses)[9:12])
+futureChoiceBach_alt <- futureChoiceBach_alt[!is.na(futureChoiceBach_alt$Engineering),]
 
 # Graphs comparing future choice vs scoring and opinions
 graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..count..,group=Gender,fill=Gender)) +
@@ -231,12 +232,24 @@ graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..count..,group=Gender,fill
 
 graphFuture_alt <- ggplot(futureChoiceBach_alt,aes(x=Gender,y=..count..,group=value,fill=value)) +
   geom_bar(position = "fill") +
-  scale_fill_brewer(palette = "Set1", direction = -1) +
+  scale_fill_brewer(palette = "Set1", direction = -1, name = "Score") +
   facet_grid(Engineering ~ variable, scales = "free_y") +
-  xlab("Scoring") +
+  xlab("Percentage") +
   ylab("Density") +
-  ggtitle("What will students do in the future vs. their scoring in STEM")
+  ggtitle("Whether the students will choose an engineering or not vs. their scoring in STEM") + 
+  theme(legend.position = "bottom")
 
-#print(graphFuture_alt)
+futureChoiceBach_alt$temp <- paste(futureChoiceBach_alt$variable,futureChoiceBach_alt$Engineering,sep = " - ")
+
+graphFuture_alt <- ggplot(futureChoiceBach_alt,aes(x=Gender,y=..count..,group=value,fill=value)) +
+  geom_bar(position = "fill") + geom_text(aes(label = ..count..,y = mid_y), stat= "indentity") +
+  scale_fill_brewer(palette = "Set1", direction = -1, name = "Score") +
+  facet_wrap(~ Course+temp,ncol=8) +
+  xlab("Percentage") +
+  ylab("Density") +
+  ggtitle("Whether the students will choose an engineering or not vs. their scoring in STEM") + 
+  theme(legend.position = "bottom",strip.text = element_text(size=8))
+
+print(graphFuture_alt)
 #print(graphFuturevsOpinion)
 ggsave("future_vs_scoringSTEM.png", plot = graphFuture_alt)
