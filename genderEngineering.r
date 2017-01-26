@@ -90,7 +90,7 @@ allResponses[allResponses$Eng_for_men_good == 1 &
                allResponses$Eng_for_women_good == 1 &
                allResponses$Eng_for_men_bad == 1 &
                allResponses$Eng_for_women_bad == 1,"Eng_is_for_men"] <- "Disagree"
-allResponses$Eng_is_for_Geeks <- "Neutral"
+allResponses$Eng_is_for_Geeks <- "Disagree"
 allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree"
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
 
@@ -151,6 +151,28 @@ allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[
                allResponses$Future_studies == unique(allResponses$Future_studies)[7] |
                allResponses$Future_studies == unique(allResponses$Future_studies)[8],"Immediate_future_plans"] <- "Other studies (not tech)"
 
+# All future choices in ESO (compulsory secondary education)
+futureChoiceESO <- melt(allResponses[allResponses$Course == "Compulsory secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[c(20,45,47,48)])
+
+# Translating answers
+futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[1],"value"] <- "Agree"
+futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[2],"value"] <- "Neutral"
+futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[3],"value"] <- "Disagree"
+
+# Variables and Values into factors
+futureChoiceESO$value <- factor(futureChoiceESO$value,levels = c("Agree","Neutral", "Disagree"))
+
+# Graphs comparing future choice vs scoring and opinions
+graphFuturevsOpinion <- ggplot(futureChoiceESO,aes(x=value,y=..count..,group=Gender,fill=Gender)) +
+  geom_bar(position="fill") +
+  scale_fill_grey() +
+  facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
+  xlab("Opinion") +
+  ylab("Count") +
+  ggtitle("What will students do in the future vs. their opinions")
+print(graphFuturevsOpinion)
+
+
 # Grouping and translating STEM courses scoring
 allResponses <- allResponses[!is.na(allResponses$Maths),]
 allResponses <- allResponses[!is.na(allResponses$Physics),]
@@ -175,16 +197,6 @@ allResponses$Computer_science[allResponses$Computer_science == "Notable" | allRe
 
 # All future choices in Bachillerato (upper secondary education)
 futureChoiceBach <- melt(allResponses[allResponses$Course == "Upper secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[9:12])
-# All future choices in ESO (compulsory secondary education)
-futureChoiceESO <- melt(allResponses[allResponses$Course == "Compulsory secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[c(20,45,47,48)])
-
-# Translating answers
-futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[1],"value"] <- "Agree"
-futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[2],"value"] <- "Neutral"
-futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[3],"value"] <- "Disagree"
-
-# Variables and Values into factors
-futureChoiceESO$value <- factor(futureChoiceESO$value,levels = c("Agree","Neutral", "Disagree"))
 
 # Graphs comparing future choice vs scoring and opinions
 graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
@@ -195,15 +207,7 @@ graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fi
   ylab("Density") +
   ggtitle("What will students do in the future vs. their scoring in STEM")
 
-graphFuturevsOpinion <- ggplot(futureChoiceESO,aes(x=value,y=..count..,group=Gender,fill=Gender)) +
-  geom_bar(position="fill") +
-  scale_fill_grey() +
-  facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
-  xlab("Opinion") +
-  ylab("Count") +
-  ggtitle("What will students do in the future vs. their opinions")
-
 #print(graphFuture)
 #print(graphFuturevsOpinion)
-ggsave("future_vs_scoringSTEM.png", plot = graphFuture, scale = 1.25)
-ggsave("future_vs_opinion.png", plot = graphFuturevsOpinion, scale = 1.5)
+ggsave("future_vs_scoringSTEM.png", plot = graphFuture)
+ggsave("future_vs_opinion.png", plot = graphFuturevsOpinion)
