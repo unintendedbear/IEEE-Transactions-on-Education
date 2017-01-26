@@ -1,4 +1,4 @@
-setwd('~/Github/IEEE-Transactions-on-Education/')
+setwd('~/Github/IEEE-Transactions-on-Education/respuestas/')
 
 require(ggplot2)
 require(dplyr)
@@ -29,6 +29,16 @@ allResponses <- allResponses[!is.na(allResponses$Girl),]
 allResponses$Gender <- "None"
 allResponses[allResponses$Girl == unique(allResponses$Girl)[1],"Gender"] <- "Male"
 allResponses[allResponses$Girl == unique(allResponses$Girl)[2],"Gender"] <- "Female"
+
+# Gender distribution
+graphGender <- ggplot(allResponses, aes(Course)) +
+  geom_bar(aes(fill = Gender), position = "fill") +
+  scale_fill_grey() +
+  xlab("Course") +
+  ylab("Count") +
+  ggtitle("Gender distribution among the courses")
+#print(graphGender)
+ggsave("gender_distribution.png", plot = graphGender)
 
 # Adding columns to group feelings about engineering
 allResponses$I_am_capable <- "Neutral"
@@ -84,6 +94,50 @@ allResponses$Eng_is_for_Geeks <- "Neutral"
 allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree"
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
 
+# Analysing opinions about engineers
+allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[18:23])
+# Analysing opinions about engineering
+allOpinionsEng <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[45:48])
+
+# Cleaning
+allOpinions <- allOpinions[!is.na(allOpinions$variable),]
+allOpinions <- allOpinions[!is.na(allOpinions$value),]
+allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$variable),]
+allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$value),]
+
+# Translating answers
+allOpinions[allOpinions$value == unique(allOpinions$value)[1],"value"] <- "Agree"
+allOpinions[allOpinions$value == unique(allOpinions$value)[2],"value"] <- "Neutral"
+allOpinions[allOpinions$value == unique(allOpinions$value)[3],"value"] <- "Disagree"
+
+# Variables and Values into factors
+allOpinions$value <- factor(allOpinions$value,levels = c("Agree","Neutral", "Disagree"))
+allOpinions$variable <- factor(allOpinions$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
+allOpinions$Course <- factor(allOpinions$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
+allOpinionsEng$value <- factor(allOpinionsEng$value,levels = c("Agree","Neutral", "Disagree"))
+allOpinionsEng$variable <- factor(allOpinionsEng$variable,levels = c("Eng_Good_Degree_Choice","I_am_capable","Eng_is_for_men","Eng_is_for_Geeks"))
+allOpinionsEng$Course <- factor(allOpinionsEng$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
+
+# Opinion Graphs
+graphAll <- ggplot(allOpinions,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
+  stat_density() +
+  scale_fill_grey() +
+  facet_grid(Course ~ variable, scales = "free_y") +
+  xlab("Opinion") +
+  ylab("Density") +
+  ggtitle("Do you agree with these statements about engineers?")
+
+graphAll2 <- ggplot(allOpinionsEng[allOpinionsEng$value != "Neutral",],aes(x=value,y=..count..,group=Gender,fill=Gender)) +
+  geom_bar(position="fill") +
+  scale_fill_grey() +
+  facet_grid(Course ~ variable, scales = "free_y") +
+  xlab("Opinion") +
+  ylab("Count") +
+  ggtitle("Feelings about studying an engineering")
+
+ggsave("engineer_opinions.png", plot = graphAll, scale = 1.5)
+ggsave("engineering_opinions.png", plot = graphAll2)
+
 # Adding columns to group choices about future studies
 allResponses <- allResponses[!is.na(allResponses$Future_studies),] # Cleaning, first
 allResponses$Immediate_future_plans <- "Work/Others"
@@ -119,64 +173,23 @@ allResponses$Computer_science[allResponses$Computer_science == "Suspenso"] <- "F
 allResponses$Computer_science[allResponses$Computer_science == "Aprobado bajo" | allResponses$Computer_science == "Aprobado alto"] <- "Average"
 allResponses$Computer_science[allResponses$Computer_science == "Notable" | allResponses$Computer_science == "Sobresaliente"] <- "A+"
 
-# Analysing opinions about engineers
-allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[18:23])
-# Analysing opinions about engineering
-allOpinionsEng <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[45:48])
 # All future choices in Bachillerato (upper secondary education)
 futureChoiceBach <- melt(allResponses[allResponses$Course == "Upper secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[9:12])
 # All future choices in ESO (compulsory secondary education)
 futureChoiceESO <- melt(allResponses[allResponses$Course == "Compulsory secondary ed.",], id.vars = names(allResponses)[c(44,49)], measure.vars = names(allResponses)[c(20,45,47,48)])
 
-# Cleaning
-allOpinions <- allOpinions[!is.na(allOpinions$variable),]
-allOpinions <- allOpinions[!is.na(allOpinions$value),]
-allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$variable),]
-allOpinionsEng <- allOpinionsEng[!is.na(allOpinionsEng$value),]
-
 # Translating answers
-allOpinions[allOpinions$value == unique(allOpinions$value)[1],"value"] <- "Agree"
-allOpinions[allOpinions$value == unique(allOpinions$value)[2],"value"] <- "Neutral"
-allOpinions[allOpinions$value == unique(allOpinions$value)[3],"value"] <- "Disagree"
 futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[1],"value"] <- "Agree"
 futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[2],"value"] <- "Neutral"
 futureChoiceESO[futureChoiceESO$value == unique(futureChoiceESO$value)[3],"value"] <- "Disagree"
 
 # Variables and Values into factors
-allOpinions$value <- factor(allOpinions$value,levels = c("Agree","Neutral", "Disagree"))
-allOpinions$variable <- factor(allOpinions$variable,levels = c("Social_acceptance","Wealth","Creative_job","Easy_job","Good_schedule", "Job_impact"))
-allOpinions$Course <- factor(allOpinions$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
-allOpinionsEng$value <- factor(allOpinionsEng$value,levels = c("Agree","Neutral", "Disagree"))
-allOpinionsEng$variable <- factor(allOpinionsEng$variable,levels = c("Eng_Good_Degree_Choice","I_am_capable","Eng_is_for_men","Eng_is_for_Geeks"))
-allOpinionsEng$Course <- factor(allOpinionsEng$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
 futureChoiceESO$value <- factor(futureChoiceESO$value,levels = c("Agree","Neutral", "Disagree"))
 
-# Gender distribution
-graphGender <- ggplot(allResponses, aes(Course)) +
-  geom_bar(aes(fill = Gender)) +
-  xlab("Course") +
-  ylab("Count") +
-  ggtitle("Gender distribution among the courses")
-#print(graphGender)
-ggsave("gender_distribution.png", plot = graphGender)
-
-# Opinion Graphs
-graphAll <- ggplot(allOpinions,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
-  stat_density() +
-  facet_grid(Course ~ variable, scales = "free_y") +
-  xlab("Opinion") +
-  ylab("Density") +
-  ggtitle("Do you agree with these statements about engineers?")
-
-graphAll2 <- ggplot(allOpinionsEng[allOpinionsEng$value != "Neutral",],aes(x=value,y=..count..,group=Gender,fill=Gender)) +
-  geom_bar(position="fill") +
-  facet_grid(Course ~ variable, scales = "free_y") +
-  xlab("Opinion") +
-  ylab("Count") +
-  ggtitle("Feelings about studying an engineering")
-
+# Graphs comparing future choice vs scoring and opinions
 graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fill=Gender)) +
   stat_density() +
+  scale_fill_grey() +
   facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
   xlab("Scoring") +
   ylab("Density") +
@@ -184,16 +197,13 @@ graphFuture <- ggplot(futureChoiceBach,aes(x=value,y=..density..,group=Gender,fi
 
 graphFuturevsOpinion <- ggplot(futureChoiceESO,aes(x=value,y=..count..,group=Gender,fill=Gender)) +
   geom_bar(position="fill") +
+  scale_fill_grey() +
   facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
   xlab("Opinion") +
   ylab("Count") +
   ggtitle("What will students do in the future vs. their opinions")
 
-#print(graphAll)
-#print(graphAll2)
 #print(graphFuture)
 #print(graphFuturevsOpinion)
-ggsave("engineer_opinions.png", plot = graphAll, scale = 1.75)
-ggsave("engineering_opinions.png", plot = graphAll2, scale = 1.75)
-ggsave("future_vs_scoringSTEM.png", plot = graphFuture, scale = 1.5)
-ggsave("future_vs_opinion.png", plot = graphFuturevsOpinion, scale = 1.75)
+ggsave("future_vs_scoringSTEM.png", plot = graphFuture, scale = 1.25)
+ggsave("future_vs_opinion.png", plot = graphFuturevsOpinion, scale = 1.5)
