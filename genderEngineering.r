@@ -1,4 +1,4 @@
-setwd('~/Github/IEEE-Transactions-on-Education/respuestas/')
+setwd('~/Github/IEEE-Transactions-on-Education/')
 
 require(ggplot2)
 require(dplyr)
@@ -40,9 +40,10 @@ graphGender <- ggplot(allResponses, aes(Course)) +
   scale_fill_brewer(palette = "Set1", direction = -1) +
   xlab("Course") +
   ylab("Percentage") +
-  ggtitle("Gender distribution among the courses")
+  ggtitle("Gender distribution among the courses") +
+  theme(legend.position = "bottom")
 #print(graphGender)
-ggsave("gender_distribution.png", plot = graphGender)
+ggsave("img/gender_distribution.pdf", plot = graphGender, units = "mm", width = 180, height = 120, scale = 0.75)
 
 # Adding columns to group feelings about engineering
 allResponses$I_am_capable <- "Neutral"
@@ -123,25 +124,27 @@ allOpinionsEng$variable <- factor(allOpinionsEng$variable,levels = c("Eng_Good_D
 allOpinionsEng$Course <- factor(allOpinionsEng$Course,levels = c("Compulsory secondary ed.","Upper secondary ed.","Vocational courses"))
 
 # Opinion Graphs
-graphAll <- ggplot(allOpinions[allOpinions$variable != "Social_acceptance",],aes(x=value,y=..count..,group=Gender,fill=Gender)) +
+graphAll <- ggplot(allOpinions[allOpinions$variable != "Social_acceptance",],aes(x=Gender,y=..count..,group=value,fill=value)) +
   geom_bar(position = "fill") +
   scale_fill_brewer(palette = "Set1", direction = -1) +
   facet_grid(Course ~ variable, scales = "free_y") +
   xlab("Opinion") +
   ylab("Percentage") +
-  ggtitle("Do you agree with these statements about engineers?")
+  ggtitle("Do you agree with these statements about engineers?") +
+  theme(legend.position = "bottom")
 
-graphAll2 <- ggplot(allOpinionsEng,aes(x=value,y=..count..,group=Gender,fill=Gender)) +
+graphAll2 <- ggplot(allOpinionsEng,aes(x=Gender,y=..count..,group=value,fill=value)) +
   geom_bar(position="fill") +
   scale_fill_brewer(palette = "Set1", direction = -1) +
   facet_grid(Course ~ variable, scales = "free_y") +
   xlab("Opinion") +
   ylab("Percentage") +
-  ggtitle("Feelings about studying an engineering")
+  ggtitle("Feelings about studying an engineering") +
+  theme(legend.position = "bottom")
 
 #print(graphAll2)
-ggsave("engineer_opinions.png", plot = graphAll, scale = 1.15)
-ggsave("engineering_opinions.png", plot = graphAll2)
+ggsave("img/engineer_opinions.pdf", plot = graphAll, units = "mm", width = 100, height = 90, scale = 1.75)
+ggsave("img/engineering_opinions.pdf", plot = graphAll2, units = "mm", width = 100, height = 90, scale = 1.75)
 
 # Adding columns to group choices about future studies
 allResponses <- allResponses[!is.na(allResponses$Future_studies),] # Cleaning, first
