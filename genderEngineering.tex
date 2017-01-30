@@ -547,7 +547,7 @@ The students undertook the survey while they where at class, and the classes vis
     	& \multirow{2}{*}{Total Enrolled} & \multicolumn{2}{l|}{Surveyed} & \multirow{2}{*}{Total Enrolled} & \multicolumn{2}{l|}{Surveyed} & \\ \cline{3-4} \cline{6-7}
     	& & Male & Female & & Male & Female & \\ \hline
     	Compulsory secondary education, years 3 and 4 & 122 & 33 & 30 & 123 & 12  & 25 & 14 - 18 \\ \hline
-    	Upper secondary education, both years         & 185 & 26 & 10 & 169 & 52  & 45 & 16 - 20 \\ \hline
+    	Upper secondary education, both years         & 90  & 28 & 13 & 92  & 50  & 42 & 16 - 20 \\ \hline
     	Vocational courses                            & 252 & 46 & 4  & 403 & 189 & 15 & 18 -    \\ \hline
     \end{tabular}
   \end{center}
@@ -606,22 +606,7 @@ The same study has been performed with the reasons given by the students when as
 	\label{fig:opinionsEng}
 \end{figure}
 
-%\begin{table}
-%	\caption{{\scriptsize Distribution of surveyed students by academic year.}}
-%	\label{tab:muestra}
-%	
-%	\begin{center}
-%		\begin{tabular}{|m{6cm}|c|c|}
-%			\hline
-%			{\small Academic Year} & {\small Students} & {\small Link to the survey} \\ \hline
-%			{\small Tecnología de 3º y 4º de la E.S.O.} & {\small 63} & {\small \url{https://goo.gl/BE3Doa}} \\ \hline
-%			{\small Tecnología de 2º de Bachillerato y TIC de 1º de Bachillerato} & {\small 36} & {\small \url{https://goo.gl/usH9Bv}} \\ \hline
-%			{\small Ciclos Formativos de Enseñanzas Técnicas} & {\small 50} & {\small \url{https://goo.gl/uDuVxW}} \\ \hline
-%		\end{tabular}
-%	\end{center}
-%\end{table}
-
-\appendix{The Educational System in Spain}
+\appendix[The Educational System in Spain]
 \label{ap:courses}
 
 In order to clarify what students have participated in our study, there is a need for specifying how the educational system works in Spain. High school is divided into 6 years, of which 4 are ``E.S.O.'' (Compulsory secondary education) and ``Bachillerato'' (Upper secondary education). Normally, students from 3rd and 4th courses of E.S.O. and 1st and 2nd courses of Bachillerato range from 15 to 18 years old. There can be students that have repeated a course and be older than 18 years old, but rarely older than 20.
@@ -634,136 +619,10 @@ After Bachillerato, students can go to University, work, or study a ``Ciclo Form
   \item Multiplatform applications development vocational course
 \end{itemize}
 
-All target courses are related to technology or computer science. The students of these courses are not necessary 18 or 19 years old, but sometimes are unnocupied people or University students who had abandoned the degree for a more practical option. 
-
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
-
-
-
+All target courses are related to technology or computer science. The students of these courses are not necessary 18 or 19 years old, but sometimes are unnocupied people or University students who had abandoned the degree for a more practical option.
 
 \section{Conclusion}
 The conclusion goes here.
-
-
-
-
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-%\appendices
-%\section{Proof of the First Zonklar Equation}
-%Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-%\section{}
-%Appendix two text goes here.
-
 
 % use section* for acknowledgment
 \section*{Acknowledgment}
