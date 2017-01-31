@@ -87,16 +87,16 @@ allResponses[allResponses$Eng_for_men_good == 0 &
 allResponses[allResponses$Eng_for_men_good == 1 &
                allResponses$Eng_for_women_good == 1 &
                allResponses$Eng_for_men_bad == 0 &
-               allResponses$Eng_for_women_bad == 0,"Eng_is_for_men"] <- "Neutral"
+               allResponses$Eng_for_women_bad == 0,"Eng_is_for_men"] <- "Disagree"
 allResponses[allResponses$Eng_for_men_good == 0 &
                allResponses$Eng_for_women_good == 0 &
                allResponses$Eng_for_men_bad == 1 &
-               allResponses$Eng_for_women_bad == 1,"Eng_is_for_men"] <- "Neutral"
+               allResponses$Eng_for_women_bad == 1,"Eng_is_for_men"] <- "Disagree"
 allResponses[allResponses$Eng_for_men_good == 1 &
                allResponses$Eng_for_women_good == 1 &
                allResponses$Eng_for_men_bad == 1 &
-               allResponses$Eng_for_women_bad == 1,"Eng_is_for_men"] <- "Neutral"
-allResponses$Eng_is_for_Geeks <- "Disagree"
+               allResponses$Eng_for_women_bad == 1,"Eng_is_for_men"] <- "Disagree"
+allResponses$Eng_is_for_Geeks <- "Neutral"
 allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree"
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
 
@@ -148,7 +148,8 @@ ggsave("img/engineer_opinions.pdf", plot = graphAll, units = "mm", width = 100, 
 ggsave("img/engineering_opinions.pdf", plot = graphAll2, units = "mm", width = 110, height = 90, scale = 1.75)
 
 # Adding columns to group choices about future studies
-allResponses <- allResponses[!is.na(allResponses$Future_studies),] # Cleaning, first
+#allResponses <- allResponses[!is.na(allResponses$Future_studies),] # Cleaning, first
+allResponses <- allResponses[!is.na(allResponses$Engineering),] # Cleaning, first
 allResponses$Immediate_future_plans <- "Work/Others"
 allResponses[allResponses$Future_studies == unique(allResponses$Future_studies)[1] |
                allResponses$Future_studies == unique(allResponses$Future_studies)[4] |
@@ -183,8 +184,8 @@ graphFuturevsOpinion <- ggplot(futureChoiceESO,aes(x=value,y=..count..,group=Gen
   facet_grid(Immediate_future_plans ~ variable, scales = "free_y") +
   xlab("Opinion") +
   ylab("Percentage") +
-  ggtitle("What will students do in the future vs. their opinions")
-print(graphFuturevsOpinion)
+  ggtitle("'Are you considering studying an engineering degree?' (Yes/No) vs. students' opinions")
+#print(graphFuturevsOpinion)
 
 futureChoiceESO_alt$temp <- paste(futureChoiceESO_alt$variable,futureChoiceESO_alt$Engineering,sep = " - ")
 
@@ -194,10 +195,10 @@ graphFuturevsOpinion_alt <- ggplot(futureChoiceESO_alt,aes(x=Gender,y=..count..,
   facet_wrap(~ Course+temp,ncol=8) +
   xlab("Gender") +
   ylab("Percentage") +
-  ggtitle("What will students do in the future vs. their opinions") + 
+  ggtitle("'Are you considering studying an engineering degree?' (Yes/No) vs. students' opinions") + 
   theme(legend.position = "bottom",strip.text = element_text(size=8))
 
-ggsave("img/future_vs_opinion.pdf", plot = graphFuturevsOpinion_alt, units = "mm", width = 200, height = 110, scale = 1.5)
+ggsave("img/future_vs_opinion.pdf", plot = graphFuturevsOpinion_alt, units = "mm", width = 200, height = 100, scale = 1.5)
 
 # Grouping and translating STEM courses scoring
 #allResponses <- allResponses[!is.na(allResponses$Maths),]
@@ -245,9 +246,9 @@ graphFuture_alt <- ggplot(futureChoiceBach_alt,aes(x=Gender,y=..count..,group=va
   facet_wrap(~ Course+temp,ncol=8) +
   xlab("Percentage") +
   ylab("Density") +
-  ggtitle("Whether the students will choose an engineering or not vs. their scoring in STEM") + 
+  ggtitle("'Are you considering studying an engineering degree?' (Yes/No) vs. students' reported scoring in STEM") + 
   theme(legend.position = "bottom",strip.text = element_text(size=8))
 
-print(graphFuture_alt)
+#print(graphFuture_alt)
 #print(graphFuturevsOpinion)
 ggsave("img/future_vs_scoringSTEM.pdf", plot = graphFuture_alt, units = "mm", width = 200, height = 110, scale = 1.5)
