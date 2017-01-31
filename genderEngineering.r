@@ -195,7 +195,7 @@ graphFuturevsOpinion_alt <- ggplot(futureChoiceESO_alt,aes(x=Gender,y=..count..,
   facet_wrap(~ Course+temp,ncol=8) +
   xlab("Gender") +
   ylab("Percentage") +
-  ggtitle("'Are you considering studying an engineering degree?' (Yes/No) vs. students' opinions") + 
+  ggtitle("'Do you consider studying an engineering degree?' (Yes/No) vs. students' opinions") + 
   theme(legend.position = "bottom",strip.text = element_text(size=8))
 
 ggsave("img/future_vs_opinion.pdf", plot = graphFuturevsOpinion_alt, units = "mm", width = 200, height = 100, scale = 1.5)
@@ -246,9 +246,9 @@ graphFuture_alt <- ggplot(futureChoiceBach_alt,aes(x=Gender,y=..count..,group=va
   facet_wrap(~ Course+temp,ncol=8) +
   xlab("Percentage") +
   ylab("Density") +
-  ggtitle("'Are you considering studying an engineering degree?' (Yes/No) vs. students' reported scoring in STEM") + 
+  ggtitle("'Do you consider studying an engineering degree?' (Yes/No) vs. students' reported scoring in STEM") + 
   theme(legend.position = "bottom",strip.text = element_text(size=8))
 
 #print(graphFuture_alt)
 #print(graphFuturevsOpinion)
-ggsave("img/future_vs_scoringSTEM.pdf", plot = graphFuture_alt, units = "mm", width = 200, height = 110, scale = 1.5)
+ggsave("img/future_vs_scoringSTEM.png", plot = graphFuture_alt, units = "mm", width = 200, height = 110, scale = 1.5)
