@@ -1,9 +1,11 @@
-setwd('~/Github/IEEE-Transactions-on-Education/')
+setwd('~/Github/IEEE-Transactions-on-Education/respuestas')
 
 require(ggplot2)
 require(dplyr)
 require(reshape2)
 require(xtable)
+require(multcomp)
+require(PMCMR)
 
 # Reading responses from Z-V
 responsesESOZV_csv <- "Respuestas - ESO_processed.csv"
@@ -22,6 +24,9 @@ responsesBachZV <- rbind(responsesBachZV, responsesBachLM)
 responsesESOZV$Course <- "Compulsory secondary ed."
 responsesBachZV$Course <- "Upper secondary ed."
 responsesCFZV$Course <- "Vocational courses"
+#responsesESOZV$Course <- "ESO"
+#responsesBachZV$Course <- "Bach"
+#responsesCFZV$Course <- "CF"
 
 # All data together
 allResponses <- rbind(responsesESOZV, responsesBachZV, responsesCFZV)
@@ -36,15 +41,15 @@ levels(allResponses$Engineering) <- c(levels(allResponses$Engineering), "Yes")
 allResponses$Engineering[allResponses$Engineering == "Sí"] <- "Yes"
 
 # Gender distribution
-graphGender <- ggplot(allResponses, aes(Course)) +
-  geom_bar(aes(fill = Gender), position = "fill") +
-  scale_fill_brewer(palette = "Set1", direction = -1) +
-  xlab("Course") +
-  ylab("Percentage") +
-  ggtitle("Gender distribution among the courses") +
-  theme(legend.position = "bottom")
+#graphGender <- ggplot(allResponses, aes(Course)) +
+#  geom_bar(aes(fill = Gender), position = "fill") +
+#  scale_fill_brewer(palette = "Set1", direction = -1) +
+#  xlab("Course") +
+#  ylab("Percentage") +
+#  ggtitle("Gender distribution among the courses") +
+#  theme(legend.position = "bottom")
 #print(graphGender)
-ggsave("img/gender_distribution.pdf", plot = graphGender, units = "mm", width = 180, height = 120, scale = 0.75)
+#ggsave("img/gender_distribution.pdf", plot = graphGender, units = "mm", width = 180, height = 120, scale = 0.75)
 
 # Adding columns to group feelings about engineering
 allResponses$I_am_capable <- "Neutral"
@@ -99,6 +104,45 @@ allResponses[allResponses$Eng_for_men_good == 1 &
 allResponses$Eng_is_for_Geeks <- "Neutral"
 allResponses[allResponses$Eng_for_geeks_good == 1, "Eng_is_for_Geeks"] <- "Agree"
 allResponses[allResponses$Eng_for_geeks_bad == 1, "Eng_is_for_Geeks"] <- "Agree"
+
+# Statistical tests
+
+allResponses$Girl <- as.factor(allResponses$Girl)
+allResponses$Course <- as.factor(allResponses$Course)
+#allResponses$I_am_capable <- as.factor(allResponses$I_am_capable)
+#allResponses$Girl <- factor(as.numeric(allResponses$Girl) - 1)
+#allResponses$Course <- factor(as.numeric(allResponses$Course) - 1)
+
+#allResponses$I_am_capable <- as.factor(allResponses$I_am_capable)
+#allResponses$I_am_capable <- as.numeric(allResponses$I_am_capable)
+
+mod <- aov(I_am_capable ~ Course*Girl-1, data = allResponses)
+coef(mod)
+Dunnet <- glht(mod, linfct =
+                 c("CourseCF:GirlSí = 0",
+                   "CourseESO:GirlSí = 0",
+                   "CourseCF:GirlSí - CourseESO:GirlSí = 0"))
+
+kruskal.test(allResponses$I_am_capable ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$I_am_capable ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Eng_Good_Degree_Choice ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Eng_Good_Degree_Choice ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Eng_is_for_men ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Eng_is_for_men ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Eng_is_for_Geeks ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Eng_is_for_Geeks ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Social_acceptance ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Social_acceptance ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Wealth ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Wealth ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Creative_job ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Creative_job ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Easy_job ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Easy_job ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Good_schedule ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Good_schedule ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
+kruskal.test(allResponses$Job_impact ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses)
+posthoc.kruskal.nemenyi.test(allResponses$Job_impact ~ interaction(allResponses$Girl, allResponses$Course), data = allResponses, dist = "Chisquare")
 
 # Analysing opinions about engineers
 allOpinions <- melt(allResponses,id.vars=names(allResponses)[c(44,43)],measure.vars = names(allResponses)[18:23])
