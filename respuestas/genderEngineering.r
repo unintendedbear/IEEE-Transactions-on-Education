@@ -64,7 +64,7 @@ graphGender <- ggplot(allStudents, aes(Course)) +
   xlab("Course") +
   ylab("Percentage") +
   scale_y_continuous(labels = scales::percent) +
-  theme(legend.position = "bottom", axis.text.x = element_text(size=7.5)) +
+  theme(legend.position = "bottom", axis.text.x = element_text(size=7)) +
   ggtitle("Gender distribution among the courses")
 print(graphGender)
 ggsave("../img/gender_distribution.pdf", plot = graphGender, scale = 2.25,units = "mm", height = 70, width = 90, dpi = 600)
